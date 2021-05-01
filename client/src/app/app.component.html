@@ -1,2 +1,8 @@
-{{users}}
-<div *ngFor="let user of users">{{user.id}}-{{user.userName}}</div>
+<div class="container">
+    <div class="row">
+        <app-nav></app-nav>
+    </div>
+    <div *ngFor="let user of users" class="row">
+        {{user.id}}-{{user.userName}}
+    </div>
+</div>
