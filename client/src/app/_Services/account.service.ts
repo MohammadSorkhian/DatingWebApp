@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import {map, tap} from 'rxjs/operators'
-import { authUser } from '../Models/authUser.model';
+import { authUser } from '../_Models/authUser.model';
 
 
 @Injectable({

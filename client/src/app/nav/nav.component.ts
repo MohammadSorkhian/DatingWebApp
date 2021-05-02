@@ -1,9 +1,11 @@
 import { stringify } from '@angular/compiler/src/util';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
-import { authUser } from '../Models/authUser.model';
-import { AccountService } from '../Services/account.service';
+import { authUser } from '../_Models/authUser.model';
+import { AccountService } from '../_Services/account.service';
 
 @Component({
   selector: 'app-nav',
@@ -18,12 +20,12 @@ export class NavComponent implements OnInit, OnDestroy {
   currentUser:authUser;
   // CurrentUser:Observable<authUser>;
 
-  constructor(private accountService:AccountService) { }
-
+  constructor(private accountService:AccountService,
+              private router:Router,
+              private toaster:ToastrService,){}
 
 
   ngOnInit(): void {
-
     this.LoginForm = new FormGroup({
       'userName': new FormControl(null, Validators.required),
       'passWord': new FormControl(null, Validators.required),
@@ -42,12 +44,19 @@ export class NavComponent implements OnInit, OnDestroy {
 
     this.subscription2 = this.accountService
     .login(username, password)
-    .subscribe(error => console.log(error));
+    .subscribe( () => {
+      this.router.navigateByUrl("/members");
+    },
+      err => {
+        console.log(err);
+        this.toaster.error(err.error);
+      });
   }
 
 
   logout(){
     this.accountService.logout();
+    this.router.navigateByUrl("/");
   }
 
 

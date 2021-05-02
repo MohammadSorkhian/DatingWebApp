@@ -1,23 +1,48 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Daiting App</a>
+      <a class="navbar-brand" style="color: aliceblue;" routerLink="/" routerLinkActive="active">Daiting App</a>
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <li class="nav-item">
-            <a *ngIf="(!!currentUser)" class="nav-link " aria-current="page" href="#" >Matches</a>
+            <a 
+            *ngIf="(!!currentUser)" 
+            routerLink="/members" 
+            routerLinkActive="active" 
+            class="nav-link " 
+            aria-current="page" >Matches
+          </a>
           </li>
           <li class="nav-item">
-            <a *ngIf="(!!currentUser)" class="nav-link" href="#" >Lists</a>
+            <a 
+            *ngIf="(!!currentUser)" 
+            routerLink="/lists" 
+            routerLinkActive="active"
+            class="nav-link">Lists
+          </a>
           </li>
           <li class="nav-item">
-            <a *ngIf="(!!currentUser)" class="nav-link" href="#">Messages</a>
+            <a 
+            *ngIf="(!!currentUser)" 
+            routerLink="/messages" 
+            routerLinkActive="active"
+            class="nav-link">Messages
+          </a>
           </li>
           <li class="nav-item">
-            <a *ngIf="(!!currentUser)" (click)='logout()' class="nav-link" href="#">Logout</a>
+            <a 
+            *ngIf="(!!currentUser)" 
+            (click)='logout()' 
+            style="cursor: pointer;"
+            class="nav-link">Logout
+          </a>
           </li>
         </ul>
 
         <div *ngIf='currentUser' class="dropdown" dropdown>
-          <a class="dropdown-toggle text-light" style="cursor: pointer;" dropdownToggle>Welcome User</a>
+          <a 
+            class="dropdown-toggle text-light" 
+            style="cursor: pointer;" 
+            dropdownToggle>Welcome {{currentUser['userName'] | titlecase}}
+        </a>
           <div class="dropdown-menu" *dropdownMenu>
             <a class="dropdown-item" role="menuitem" style="cursor: pointer;">Edit Profile</a>
             <a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Logout</a>
