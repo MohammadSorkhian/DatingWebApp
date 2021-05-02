@@ -3,16 +3,28 @@
       <a class="navbar-brand" href="#">Daiting App</a>
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <li class="nav-item">
-            <a class="nav-link " aria-current="page" href="#">Matches</a>
+            <a *ngIf="(!!currentUser)" class="nav-link " aria-current="page" href="#" >Matches</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Lists</a>
+            <a *ngIf="(!!currentUser)" class="nav-link" href="#" >Lists</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Messages</a>
+            <a *ngIf="(!!currentUser)" class="nav-link" href="#">Messages</a>
+          </li>
+          <li class="nav-item">
+            <a *ngIf="(!!currentUser)" (click)='logout()' class="nav-link" href="#">Logout</a>
           </li>
         </ul>
-        <form class="d-flex" [formGroup] = "LoginForm" (ngSubmit)="Login()">
+
+        <div *ngIf='currentUser' class="dropdown" dropdown>
+          <a class="dropdown-toggle text-light" style="cursor: pointer;" dropdownToggle>Welcome User</a>
+          <div class="dropdown-menu" *dropdownMenu>
+            <a class="dropdown-item" role="menuitem" style="cursor: pointer;">Edit Profile</a>
+            <a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Logout</a>
+          </div>
+        </div>
+
+        <form *ngIf="!(!!currentUser)" class="d-flex" [formGroup] = "LoginForm" (ngSubmit)="Login()">
           <input 
           class="form-control me-2" 
           type="text" 

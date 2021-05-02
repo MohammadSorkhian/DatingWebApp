@@ -1,6 +1,8 @@
 import { stringify } from '@angular/compiler/src/util';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
+import { authUser } from '../Models/authUser.model';
 import { AccountService } from '../Services/account.service';
 
 @Component({
@@ -8,12 +10,16 @@ import { AccountService } from '../Services/account.service';
   templateUrl: './nav.component.html',
   // styleUrls: ['./nav.component.css']
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, OnDestroy {
 
   LoginForm:FormGroup; 
-  loggedIn:boolean;
+  subscription1:Subscription;
+  subscription2:Subscription;
+  currentUser:authUser;
+  // CurrentUser:Observable<authUser>;
 
   constructor(private accountService:AccountService) { }
+
 
 
   ngOnInit(): void {
@@ -22,19 +28,32 @@ export class NavComponent implements OnInit {
       'userName': new FormControl(null, Validators.required),
       'passWord': new FormControl(null, Validators.required),
     });
+
+    this.subscription1 =  this.accountService.currentUserSubject
+      .subscribe(res => {
+        this.currentUser = res;
+      });
   }
 
 
   Login(){
     let username:string = this.LoginForm.controls['userName'].value;
     let password:string = this.LoginForm.controls['passWord'].value;
-    this.accountService
-    .login(username, password)
-    .subscribe(response=>{console.log(response)},
-    error => console.log(error)
-    );
 
-    
+    this.subscription2 = this.accountService
+    .login(username, password)
+    .subscribe(error => console.log(error));
+  }
+
+
+  logout(){
+    this.accountService.logout();
+  }
+
+
+  ngOnDestroy(){
+    this.subscription1.unsubscribe()
+    this.subscription2.unsubscribe()
   }
   
 }
