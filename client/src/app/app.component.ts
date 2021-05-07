@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { authUser } from './_Models/authUser.model';
 import { User } from './_Models/user.model';
 import { AccountService } from './_Services/account.service';
+// import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
+
 
 @Component({
   selector: 'app-root',
@@ -16,7 +18,7 @@ export class AppComponent implements OnInit{
   constructor(private http:HttpClient, private accountService:AccountService){}
 
   ngOnInit() {
-    this.getUsers();
+    // this.getUsers();
     this.setCurrentUser();
   }
 

@@ -8,7 +8,7 @@ import { MemberListComponent } from './members/member-list/member-list.component
 const routes: Routes = [
   {path:"" , component:HomeComponent, pathMatch:"full" },
   {path:"members" , component:MemberListComponent , canActivate:[AuthGuard]},
-  {path:"members/:id" , component:MemberDetailComponent, canActivate:[AuthGuard] },
+  {path:"members/:Username" , component:MemberDetailComponent, canActivate:[AuthGuard] },
   // {path:"lists" , component: ListsComponent},
   // {path:"messages" , component:MessagesComponent },
   {path:"**" , component:HomeComponent, pathMatch:"full" },
