@@ -13,6 +13,7 @@ import { MemberDetailComponent } from './members/member-detail/member-detail.com
 import { SharedModule } from './_modules/shared.module';
 import { MemberCardComponent } from './members/member-card/member-card.component';
 import { JwtInterceptor } from './_intercepter/jwt.interceptor';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
 // import {NgxGalleryModule} from 'ngx-gallery';
 
 
@@ -25,6 +26,7 @@ import { JwtInterceptor } from './_intercepter/jwt.interceptor';
     MemberListComponent,
     MemberDetailComponent,
     MemberCardComponent,
+    MemberEditComponent,
   ],
   imports: [
     BrowserModule,

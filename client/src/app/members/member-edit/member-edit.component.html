@@ -1,0 +1,90 @@
+<div class="row" *ngIf="member">
+    <div class="col-4">
+        <h1>Your Profile</h1>
+    </div>
+    <div class="col-8">
+        <div class="alert alet-info">
+            <p><strong>Information:</strong>You have made changes. Any unsaved changes will be lost</p>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card">
+            <img src="{{member.photoUrl || './assets/user.png'}}" alt="member.knownAs"
+                class="card-img-top img-thumbnail">
+            <div class="card-body">
+                <div>
+                    <strong>Location</strong>
+                    <p>{{member.city}}, {{member.country}}</p>
+                </div>
+                <div>
+                    <strong>Age</strong>
+                    <p>{{member.age}}</p>
+                </div>
+                <div>
+                    <strong>Member Last Active</strong>
+                    <p>{{member.lastActive}}</p>
+                </div>
+                <div>
+                    <strong>Member Since</strong>
+                    <p>{{member.created}}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                    <button class="btn btn-secondary btn-block">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <tabset class="member-tabset">
+            <tab heading='About {{member.knownAs}}'>
+                <form [formGroup]="profileForm" >
+                    <br>
+                    <h4>Description</h4>
+                    <textarea 
+                       formControlName="introduction" 
+                        name="indroduction" 
+                        rows="6"
+                        class="form-control">
+                     </textarea>
+                     <br>
+                    <h4  class="mt-2">Looking For</h4>
+                    <textarea 
+                        formControlName="lookingFor" 
+                        name="LookingFor" 
+                        rows="6"
+                        class="form-control">
+                    </textarea>
+                    <br>
+                    <h4 class="mt-2">Interest</h4>
+                    <textarea 
+                        formControlName="interests" 
+                        name="Interests" 
+                        rows="6"
+                        class="form-control">
+                    </textarea>
+                    <br>
+                    <h4>Location Details</h4>
+                    <div class="form-inline">
+                        <label for="city">City: </label>
+                        <input 
+                            formControlName="city" 
+                            type="text" 
+                            name="city" 
+                            class="form-control mx-2">
+                        <label for="city">Country: </label>
+                        <input 
+                            formControlName="country" 
+                            type="text" 
+                            name="country" 
+                            class="form-control mx-2">
+                    </div>
+                    <br>
+                </form>
+            </tab>
+            <tab heading='Edit Photos'>
+                <p>Photo Edit Go Here</p>
+            </tab>
+
+        </tabset>
+    </div>
+</div>

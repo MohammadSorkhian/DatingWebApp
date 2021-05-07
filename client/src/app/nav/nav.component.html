@@ -44,7 +44,7 @@
             dropdownToggle>Welcome {{currentUser['userName'] | titlecase}}
         </a>
           <div class="dropdown-menu" *dropdownMenu>
-            <a class="dropdown-item" role="menuitem" style="cursor: pointer;">Edit Profile</a>
+            <a routerLink="/member/edit" class="dropdown-item" role="menuitem" style="cursor: pointer;">Edit Profile</a>
             <a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Logout</a>
           </div>
         </div>
