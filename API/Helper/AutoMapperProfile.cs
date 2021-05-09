@@ -13,6 +13,7 @@ namespace API.Helper
             .ForMember(destUser => destUser.photoUrl,
                 opt => opt.MapFrom(srcUser =>
                     srcUser.photo.FirstOrDefault(p => p.isMain == true).url));
+            CreateMap<MemberUpdateDTO, AppUser>();
         }
 
     }

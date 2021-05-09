@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { stringify } from '@angular/compiler/src/util';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs/operators';
 import { authUser } from 'src/app/_Models/authUser.model';
 import { Member } from 'src/app/_Models/member';
@@ -17,10 +19,12 @@ export class MemberEditComponent implements OnInit {
   user:authUser;
   profileForm: FormGroup;
 
-  constructor(private memberServices:MembersService, private accountService:AccountService) {
-    this.accountService.currentUserSubject.pipe(take(1)).subscribe( authUser => this.user = authUser)
-    // console.log(this.user)
-   }
+  constructor(
+    private memberServices: MembersService,
+    private accountService: AccountService,
+    private toastr: ToastrService) {
+    this.accountService.currentUserSubject.pipe(take(1)).subscribe(authUser => this.user = authUser)
+  }
 
   ngOnInit(): void {
     this.memberServices.getMember(this.user.userName)
@@ -42,5 +46,17 @@ export class MemberEditComponent implements OnInit {
     })
   }
 
+  updateMember(){
+    this.member.introduction = this.profileForm.controls.introduction.value;
+    this.member.lookingFor = this.profileForm.controls.lookingFor.value;
+    this.member.interests = this.profileForm.controls.interests.value;
+    this.member.city = this.profileForm.controls.city.value;
+    this.member.country = this.profileForm.controls.country.value;
+
+    this.memberServices.updateMember(this.member).subscribe( () => {
+      this.toastr.success("Profile Updated")
+      });
+
+  }
 
 }
