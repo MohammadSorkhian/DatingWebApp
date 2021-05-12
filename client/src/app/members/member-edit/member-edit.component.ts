@@ -1,6 +1,6 @@
-import { stringify } from '@angular/compiler/src/util';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs/operators';
 import { authUser } from 'src/app/_Models/authUser.model';
@@ -22,15 +22,18 @@ export class MemberEditComponent implements OnInit {
   constructor(
     private memberServices: MembersService,
     private accountService: AccountService,
-    private toastr: ToastrService) {
-    this.accountService.currentUserSubject.pipe(take(1)).subscribe(authUser => this.user = authUser)
-  }
+    private toastr: ToastrService,
+    private spinnerService:NgxSpinnerService)
+    {
+    this.accountService.currentUserSubject
+    .pipe(take(1))
+    .subscribe(authUser => this.user = authUser)
+    }
 
   ngOnInit(): void {
     this.memberServices.getMember(this.user.userName)
       .toPromise().then((re) => {
         this.member = re;
-        console.log(re)
         this.createProfileForm()
       }
       )
@@ -57,6 +60,10 @@ export class MemberEditComponent implements OnInit {
       this.toastr.success("Profile Updated")
       });
 
+    this.profileForm.reset();
+    this.createProfileForm();
+
   }
+
 
 }
