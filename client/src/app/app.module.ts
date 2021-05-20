@@ -15,6 +15,7 @@ import { MemberCardComponent } from './members/member-card/member-card.component
 import { JwtInterceptor } from './_intercepter/jwt.interceptor';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 // import {NgxGalleryModule} from 'ngx-gallery';
 
 
@@ -28,6 +29,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     MemberDetailComponent,
     MemberCardComponent,
     MemberEditComponent,
+    PhotoEditorComponent,
   ],
   imports: [
     BrowserModule,

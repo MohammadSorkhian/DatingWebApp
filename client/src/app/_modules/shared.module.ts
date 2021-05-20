@@ -5,6 +5,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ToastrModule } from 'ngx-toastr';
 import {TabsModule} from 'ngx-bootstrap/tabs';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+import { FileUploadModule } from 'ng2-file-upload';
 
 
 
@@ -19,6 +20,8 @@ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
     }),
     TabsModule.forRoot(),
     NgxGalleryModule,
+    FileUploadModule,
+
   ],
     exports:[
       BrowserAnimationsModule,
@@ -26,6 +29,7 @@ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
       ToastrModule,
       TabsModule,
       NgxGalleryModule,
+      FileUploadModule,
     ]
 
 })
