@@ -23,10 +23,7 @@ baseUrl = environment.apiUrl;
     {"userName":username, "passWord":password})
     .pipe(
       map( (res:authUser) => {
-        if(res){
-          localStorage.setItem("user", JSON.stringify(res))
-        }
-        this.setCurrentUser(res)
+        if(res) this.setCurrentUser(res)
       }),
       );
   }
@@ -36,15 +33,15 @@ baseUrl = environment.apiUrl;
     .post("https://localhost:5001/api/account/register", 
     {"userName":username, "passWord":password})
     .pipe(
-      tap( (response:authUser) => {
-        this.currentUserSubject.next(response);
-        localStorage.setItem("user", JSON.stringify(response));
+      tap( (res:authUser) => {
+        this.setCurrentUser(res)
       })
     )
   }
 
   setCurrentUser(user:authUser){
-    this.currentUserSubject.next(user)
+    this.currentUserSubject.next(user);
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
   logout(){

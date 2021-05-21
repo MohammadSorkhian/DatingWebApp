@@ -38,10 +38,12 @@
         </ul>
 
         <div *ngIf='currentUser' class="dropdown" dropdown>
+          <!-- <img src={{user.photoUrl}}> -->
           <a 
             class="dropdown-toggle text-light" 
             style="cursor: pointer;" 
-            dropdownToggle>Welcome {{currentUser['userName'] | titlecase}}
+            dropdownToggle>
+            Welcome {{currentUser['userName'] | titlecase}}
         </a>
           <div class="dropdown-menu" *dropdownMenu>
             <a routerLink="/member/edit" class="dropdown-item" role="menuitem" style="cursor: pointer;">Edit Profile</a>
