@@ -98,6 +98,7 @@ namespace API.Controllers
 
         }
 
+
         [HttpGet]
         [Route("set-main-photo/{photoId}")]
         public async Task<ActionResult> setMainPhoto(int photoId)
@@ -120,6 +121,30 @@ namespace API.Controllers
             return Ok(JsonSerializer.Serialize($"Photo has been set as the main picture"));
         }
 
+
+        [HttpDelete]
+        [Route("delete-photo/{photoId}")]
+        public async Task<ActionResult> DeletePhoto(int photoId)
+        {
+            var userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await this.userRepository.GetUserByNameAsync(userName);
+            var photo = user.photo.FirstOrDefault(p => p.id == photoId);
+            bool wasMain = false;
+            if (photo == null) return NotFound();
+            if (photo.isMain == true) wasMain = true;
+            if (photo.publicId != null)
+            {
+                var result = await photoService.DeletePhotoAsync(photo.publicId);
+                if (result.Error != null) return BadRequest("Can not delete photo from cloudinary\n" + result.Error);
+            }
+            user.photo.Remove(photo);
+            if (wasMain && user.photo.Count() > 0) user.photo.ElementAt(0).isMain = true;
+            if (await userRepository.SaveAllAsync())
+                return Ok(user.photo);
+            else
+                return BadRequest("Could not delete in database\n");
+
+        }
 
 
         // [HttpGet]
