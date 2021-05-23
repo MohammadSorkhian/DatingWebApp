@@ -25,7 +25,7 @@ export class PhotoEditorComponent implements OnInit {
   constructor(private accountService:AccountService,
               private memberService:MembersService) {
     this.accountService.currentUserSubject
-    // .pipe(take(1))
+    .pipe(take(1))
     .subscribe( user => this.user = user);
    }
 
@@ -73,6 +73,18 @@ export class PhotoEditorComponent implements OnInit {
         if (p.id === photo.id) p.isMain = true;
       })
     })
+  }
+
+  deletePhoto(photo:Photo){
+    this.memberService.deletePhoto(photo.id).subscribe( (res) => {
+      var wasMain = photo.isMain? true: false;
+      var photoIndex = this.member.photo.indexOf(photo)
+      this.member.photo.splice(photoIndex,1);
+      if(wasMain) {
+        this.member.photo[0].isMain = true;
+        this.member.photoUrl = this.member.photo[0].url;
+      }
+    }, err => console.log(err))
   }
 
 }

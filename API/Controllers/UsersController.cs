@@ -80,7 +80,7 @@ namespace API.Controllers
             if(result.Error != null) return BadRequest(result.Error.Message);
 
             var photo = new Photo{
-                url = result.SecureUrl.AbsolutePath,
+                url = "https://res.cloudinary.com" + result.SecureUrl.AbsolutePath,
                 publicId = result.PublicId,
                 isMain = user.photo.Count == 0 ? true: false,
             };
