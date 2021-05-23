@@ -1,5 +1,5 @@
 export interface authUser{
     userName:string;
-    token:string
-    photoUrl
+    token:string;
+    photoUrl:string
 }

@@ -45,4 +45,8 @@ export class MembersService {
     )
   }
 
+    setMainPicture(id:number){
+    return this.http.get(this.baseUrl + "users/set-main-photo/" + id)
+  }
+
 }

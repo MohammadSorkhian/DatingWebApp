@@ -3,7 +3,9 @@ import { FileUploader } from 'ng2-file-upload';
 import { take } from 'rxjs/operators';
 import { authUser } from 'src/app/_Models/authUser.model';
 import { Member } from 'src/app/_Models/member';
+import { Photo } from 'src/app/_Models/photo';
 import { AccountService } from 'src/app/_Services/account.service';
+import { MembersService } from 'src/app/_Services/members.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -20,9 +22,10 @@ export class PhotoEditorComponent implements OnInit {
   baseUrl:string = environment.apiUrl;
   user: authUser;
 
-  constructor(private accountService:AccountService) {
+  constructor(private accountService:AccountService,
+              private memberService:MembersService) {
     this.accountService.currentUserSubject
-    .pipe(take(1))
+    // .pipe(take(1))
     .subscribe( user => this.user = user);
    }
 
@@ -38,7 +41,6 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   initializeUploader(){
-    console.log(this.user.token)
     this.uploader = new FileUploader({
       url:this.baseUrl + 'users/add-photo',
       authToken:'Bearer ' + this.user.token,
@@ -58,6 +60,19 @@ export class PhotoEditorComponent implements OnInit {
         this.member.photo.push(photo);
       }
     }
+  }
+
+  setMainPhoto(photo: Photo) {
+    this.memberService.setMainPicture(photo.id).subscribe((res) => {
+      console.log(res)
+      this.user.photoUrl = photo.url;
+      this.accountService.setCurrentUser(this.user);
+      this.member.photoUrl = photo.url;
+      this.member.photo.forEach(p => {
+        if (p.isMain) p.isMain = false;
+        if (p.id === photo.id) p.isMain = true;
+      })
+    })
   }
 
 }

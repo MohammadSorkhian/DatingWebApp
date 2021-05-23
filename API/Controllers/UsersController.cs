@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
@@ -97,7 +98,7 @@ namespace API.Controllers
 
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("set-main-photo/{photoId}")]
         public async Task<ActionResult> setMainPhoto(int photoId)
         {
@@ -114,7 +115,9 @@ namespace API.Controllers
             photo.isMain = true;
 
             await userRepository.SaveAllAsync();
-            return Ok($" photo id {photoId} has set as the the main");
+
+            // return Ok($" photo id {photoId} has set as the the main");
+            return Ok(JsonSerializer.Serialize($"Photo has been set as the main picture"));
         }
 
 

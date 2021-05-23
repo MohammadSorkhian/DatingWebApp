@@ -24,6 +24,7 @@ baseUrl = environment.apiUrl;
     .pipe(
       map( (res:authUser) => {
         if(res) this.setCurrentUser(res)
+        console.log(res)
       }),
       );
   }
@@ -48,4 +49,6 @@ baseUrl = environment.apiUrl;
     localStorage.removeItem('user');
     this.currentUserSubject.next(null);
   }
+
+
 }
