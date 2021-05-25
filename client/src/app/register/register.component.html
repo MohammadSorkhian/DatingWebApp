@@ -2,13 +2,43 @@
     <h2 class="text-center text-primary">Sign Up</h2>
     <hr>
     <div class="form-group">
-        <input type="text" class="form-control" [formControlName]="'username'">
+        <label>User Name</label>
+        <input 
+            [class.is-invalid]="!registerForm.controls.username.valid && registerForm.controls.username.touched"
+            [formControlName]="'username'"
+            type="text" 
+            class="form-control">
+        <div class="invalid-feedback">Please enter a password</div>
     </div>
     <div class="form-group">
-        <input type="password" class="form-control" [formControlName]="'password'">
+        <label>Password</label>
+        <input 
+            [class.is-invalid]="!registerForm.controls.password.valid && registerForm.controls.password.touched"
+            [formControlName]="'password'"
+            type="password" 
+            class="form-control">
+        <div 
+            *ngIf="registerForm.controls.password.hasError('minlength')"
+            class="invalid-feedback">
+            The password's length should be longer than 3
+        </div>
+        <div 
+            *ngIf="registerForm.controls.password.hasError('required')"
+            class="invalid-feedback">
+            Please enter a password
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Password Confirm</label>
+        <input 
+            [class.is-invalid]="!registerForm.controls.PasswordConfirm.valid && registerForm.controls.PasswordConfirm.touched"
+            [formControlName]="'PasswordConfirm'" 
+            type="text" 
+            class="form-control">
+        <div class="invalid-feedback">The password does not match</div>
     </div>
     <div class="form-group text-center">
-        <button type="submit" class="btn btn-success mr-2">Register</button>
+        <button type="submit" class="btn btn-success mr-2" [disabled]="!registerForm.valid">Register</button>
         <button type="button" class="btn btn-success mr-2" (click)='cancel()'>Cancel</button>
     </div>
 </form>
