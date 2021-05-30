@@ -2,14 +2,16 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210528112109_LikeEntityAdded")]
+    partial class LikeEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,13 +94,13 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.UserLike", b =>
                 {
-                    b.Property<int>("sourceUserId")
+                    b.Property<int>("sourseUserId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("likedUserId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("sourceUserId", "likedUserId");
+                    b.HasKey("sourseUserId", "likedUserId");
 
                     b.HasIndex("likedUserId");
 
@@ -126,7 +128,7 @@ namespace API.Data.Migrations
 
                     b.HasOne("API.Entities.AppUser", "sourceUser")
                         .WithMany("likedUsers")
-                        .HasForeignKey("sourceUserId")
+                        .HasForeignKey("sourseUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace API.Entities
 {
@@ -20,6 +21,9 @@ namespace API.Entities
         public string city { get; set; }
         public string country { get; set; }
         public ICollection<Photo> photo { get; set; }
+        public ICollection<UserLike> likedByUsers{ get; set; }  = new Collection<UserLike>();
+        public ICollection<UserLike> likedUsers { get; set; } = new Collection<UserLike>();
+
 
         public int GetAge()
         {
