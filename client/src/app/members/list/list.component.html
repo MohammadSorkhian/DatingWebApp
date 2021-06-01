@@ -1,0 +1,24 @@
+<div class="text-center mt-3">
+    <h2>{{predicate === "liked"? "Members I Like" : "Members who like me"}}</h2>
+</div>
+
+{{predicate}}
+
+<div class="container">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary" [ngClass]="{'active':predicate==='liked'}">
+            <input [(ngModel)]='predicate' value="liked" (ngModelChange)="LoadLikes()" type="radio" name="options" id="option1"
+                autocomplete="off" checked> Followings
+        </label>
+        <label class="btn btn-secondary" [ngClass]="{'active':predicate==='likedBy'}">
+            <input [(ngModel)]='predicate' value="likedBy" (ngModelChange)="LoadLikes()" type="radio" name="options"
+                id="option2" autocomplete="off"> Followers
+        </label>
+    </div>
+    
+    <div class="row mt-3">
+        <div class="col-4" *ngFor="let member of members">
+            <app-member-card [member]="member"></app-member-card>
+        </div>
+    </div>
+</div>
