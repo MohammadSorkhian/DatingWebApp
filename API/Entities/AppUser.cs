@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using API.Data;
 
 namespace API.Entities
 {
@@ -23,6 +24,8 @@ namespace API.Entities
         public ICollection<Photo> photo { get; set; }
         public ICollection<UserLike> likedByUsers{ get; set; }  = new Collection<UserLike>();
         public ICollection<UserLike> likedUsers { get; set; } = new Collection<UserLike>();
+        public ICollection<Message> massegeSent { get; set; }
+        public ICollection<Message> massageRecieved { get; set; }
 
 
         public int GetAge()
