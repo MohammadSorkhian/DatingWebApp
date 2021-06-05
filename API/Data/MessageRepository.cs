@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -66,9 +67,39 @@ namespace API.Data
             }).ToListAsync();
         }
 
-        public Task<IEnumerable<MessageDTO>> GetMessageThread(int currebtUserId, int recipientUserId)
+        public async Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUsername, string recipientUsername)
         {
-            throw new System.NotImplementedException();
+            var messages = await context.Messages
+            .Include( u => u.sender).ThenInclude( p => p.photo )
+            .Include( u => u.recipient).ThenInclude( p => p.photo )
+            .Where( m => 
+            (m.sender.userName == currentUsername && 
+            m.recipient.userName == recipientUsername)
+            ||
+            ( m.recipient.userName == currentUsername && 
+            m.sender.userName == recipientUsername))
+            .OrderByDescending( m => m.messageSent)
+            .Where( m => m.dateRead == null &&
+            m.recipient.userName == currentUsername).ToListAsync();
+
+            foreach (var messg in messages)
+            {
+                messg.dateRead = DateTime.Now;
+            }
+
+            await context.SaveChangesAsync();
+
+            return messages.Select( m => new MessageDTO
+            {
+                Id = m.Id,
+                senderId = m.senderId,
+                senderUserName = m.sender.userName,
+                senderPhotoUrl = m.sender.photo.FirstOrDefault( p => p.isMain ).url,
+                recipientPhotoUrl = m.recipient.photo.FirstOrDefault( p => p.isMain ).url,
+                content = m.content,
+                dateRead = m.dateRead,
+                messageSent = m.messageSent,
+            });
         }
 
         public async Task<bool> SaveAllAsync()
