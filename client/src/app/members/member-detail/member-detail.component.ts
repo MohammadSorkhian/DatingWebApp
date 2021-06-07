@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
+import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { interval } from 'rxjs';
 import { Member } from 'src/app/_Models/member';
 import { MembersService } from 'src/app/_Services/members.service';
@@ -13,15 +14,28 @@ import { MembersService } from 'src/app/_Services/members.service';
 export class MemberDetailComponent implements OnInit {
 
   member:Member;
+
   galleryOptions: NgxGalleryOptions[];
+
   galleryImages: NgxGalleryImage[];
 
+  @ViewChild('memberTabs') 
+  memberTabs;
 
   constructor(private memberService:MembersService, private activatedRoute:ActivatedRoute) { }
 
   ngOnInit(): void {
 
-    this.loadMember()
+    this.activatedRoute.data.subscribe( data => this.member = data['member'])
+
+    var selectedTab:number = 1;
+    this.activatedRoute.queryParams.subscribe( qParms => selectedTab = qParms.tab);
+    
+     setTimeout(() => {
+      this.selectTab(selectedTab)
+     }, 10); 
+
+    // this.loadMember()  //as we used resolver to load the member we do not need this any more
 
     this.galleryOptions = [
       {
@@ -34,6 +48,7 @@ export class MemberDetailComponent implements OnInit {
       }
     ]
 
+    this.galleryImages = this.getImages() //moved here from load messages
   }
 
 
@@ -50,17 +65,23 @@ export class MemberDetailComponent implements OnInit {
   }
   
 
-  loadMember() {
+  // loadMember() {
 
-    let userName: string;
-    this.activatedRoute.params.subscribe(params => userName = params['Username'])
+  //   let userName: string;
 
-    this.memberService.getMember(userName).toPromise().then( (user) => {
-      this.member = user;
-      this.galleryImages = this.getImages()
-    },
-      (err) => console.log(err)
-    )
+  //   this.activatedRoute.params.subscribe(params => userName = params['Username'])
+    
+  //   this.memberService.getMember(userName).toPromise().then( (user) => {
+  //     this.member = user;
+  //     this.galleryImages = this.getImages()
+  //   },
+  //     (err) => console.log(err)
+  //   )
+  // }
+
+
+  selectTab(tabId: number){
+    this.memberTabs.tabs[tabId].active = true;
   }
 
 }

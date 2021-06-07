@@ -7,6 +7,8 @@ import { MemberListComponent } from './members/member-list/member-list.component
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
 import { ListComponent } from './members/list/list.component';
+import { MessagesComponentComponent } from './members/messages-component/messages-component.component';
+import { MemberDetailedResolver } from './_resolver/member-detailed.resolver';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, pathMatch: "full" },
@@ -18,6 +20,7 @@ const routes: Routes = [
   {
     path: "members/:Username",
     component: MemberDetailComponent,
+    resolve: {member: MemberDetailedResolver},
     canActivate: [AuthGuard]
   },
   {
@@ -29,6 +32,11 @@ const routes: Routes = [
   {
     path:"lists",
     component: ListComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path:"messages",
+    component: MessagesComponentComponent,
     canActivate: [AuthGuard],
   },
   // {path:"messages" , component:MessagesComponent },

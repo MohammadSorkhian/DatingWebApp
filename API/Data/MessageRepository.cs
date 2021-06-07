@@ -29,7 +29,10 @@ namespace API.Data
 
         public async Task<Message> GetMessage(int id)
         {
-            return await this.context.Messages.FirstOrDefaultAsync( m => m.Id == id);
+            return await this.context.Messages
+                .Include(m => m.sender)
+                .Include( m => m.recipient)
+                .FirstOrDefaultAsync( m => m.Id == id);
         }
 
         public async Task<ICollection<MessageDTO>> GetMessagesForUser(string userName, string container)
@@ -41,16 +44,22 @@ namespace API.Data
             switch (container)
             {
                 case "inbox":
-                    quary = quary.Where(m => m.recipient.userName == userName);
+                    quary = quary.Where(m => 
+                    m.recipient.userName == userName &&
+                    m.recipientDeleted == false);
                     break;
 
                 case "outbox":
-                    quary = quary.Where(m => m.sender.userName == userName);
+                    quary = quary.Where(m => 
+                    m.sender.userName == userName &&
+                    m.senderDeleted == false);
                     break;
 
                 default:
                     quary = quary.Where(m => 
-                    m.recipient.userName == userName && m.dateRead == null);
+                    m.recipient.userName == userName &&
+                    m.dateRead == null &&
+                    m.recipientDeleted == false);
                     break;
             }
 
@@ -58,8 +67,10 @@ namespace API.Data
             {
                 Id = m.Id,
                 senderId = m.senderId,
-                senderUserName = m.sender.userName,
+                senderUsername = m.sender.userName,
                 senderPhotoUrl = m.sender.photo.FirstOrDefault(p => p.isMain).url,
+                recipientId = m.recipient.Id,
+                recipientUsername = m.recipient.userName,
                 recipientPhotoUrl = m.recipient.photo.FirstOrDefault(p => p.isMain).url,
                 content = m.content,
                 dateRead = m.dateRead,
@@ -67,20 +78,22 @@ namespace API.Data
             }).ToListAsync();
         }
 
-        public async Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUsername, string recipientUsername)
+        public async Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUsername, string otherUsername)
         {
             var messages = await context.Messages
             .Include( u => u.sender).ThenInclude( p => p.photo )
             .Include( u => u.recipient).ThenInclude( p => p.photo )
             .Where( m => 
             (m.sender.userName == currentUsername && 
-            m.recipient.userName == recipientUsername)
+            m.recipient.userName == otherUsername &&
+            m.senderDeleted == false)
             ||
             ( m.recipient.userName == currentUsername && 
-            m.sender.userName == recipientUsername))
+            m.sender.userName == otherUsername &&
+            m.recipientDeleted == false))
             .OrderByDescending( m => m.messageSent)
-            .Where( m => m.dateRead == null &&
-            m.recipient.userName == currentUsername).ToListAsync();
+            // .Where( m => m.dateRead == null &&
+            .ToListAsync();
 
             foreach (var messg in messages)
             {
@@ -93,9 +106,11 @@ namespace API.Data
             {
                 Id = m.Id,
                 senderId = m.senderId,
-                senderUserName = m.sender.userName,
+                senderUsername = m.sender.userName,
                 senderPhotoUrl = m.sender.photo.FirstOrDefault( p => p.isMain ).url,
                 recipientPhotoUrl = m.recipient.photo.FirstOrDefault( p => p.isMain ).url,
+                recipientId = m.recipient.Id,
+                recipientUsername = m.recipient.userName,
                 content = m.content,
                 dateRead = m.dateRead,
                 messageSent = m.messageSent,

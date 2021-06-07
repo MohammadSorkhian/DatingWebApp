@@ -29,6 +29,7 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
+
         [HttpPost]
         public async Task<ActionResult<MessageDTO>> CreateMessage(CreateMessageDTO createMessg)
         {
@@ -57,16 +58,16 @@ namespace API.Controllers
             return BadRequest("Could not send the message");
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MessageDTO>>> GetMessagesForUser(
 
-            string userName, string container)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MessageDTO>>> GetMessagesForUser(string container)
         {
             var currentUsername = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if(currentUsername != userName) return BadRequest("You cannot access others messages");
+            // if(currentUsername != userName) return BadRequest("You cannot access others messages");
             return Ok( await this.messageRepository
-            .GetMessagesForUser(userName, container));
+            .GetMessagesForUser(currentUsername, container));
         }
+
 
         [HttpGet]
         [Route("thread/{username}")]
@@ -75,5 +76,34 @@ namespace API.Controllers
             var currentUsername = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             return Ok(await messageRepository.GetMessageThread(currentUsername, username));
         }
+
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult> DeleteMessage(int id)
+        {
+            var currentUsername = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            Message mesg = await messageRepository.GetMessage(id);
+            var m = mesg.sender.userName;
+            var r = mesg.recipient.userName;
+            var n = currentUsername;
+            if(mesg.sender.userName != currentUsername && 
+                mesg.recipient.userName != currentUsername) 
+                return Unauthorized("This message does not belong to you");
+
+            if(mesg.sender.userName == currentUsername) 
+                mesg.senderDeleted = true;
+            else
+                mesg.recipientDeleted = true;
+            
+            if(mesg.senderDeleted && mesg.recipientDeleted)
+                messageRepository.DeleteMessage(mesg);
+            
+            if(await messageRepository.SaveAllAsync())
+                return Ok();
+
+            return BadRequest("There is a problem in deleting the message");
+        }
+
     }
 }

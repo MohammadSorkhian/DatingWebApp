@@ -17,6 +17,10 @@ import { MemberEditComponent } from './members/member-edit/member-edit.component
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 import { ListComponent } from './members/list/list.component';
+import { MessagesComponentComponent } from './members/messages-component/messages-component.component';
+import { MomentModule } from 'ngx-moment';
+import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+
 // import {NgxGalleryModule} from 'ngx-gallery';
 
 
@@ -32,6 +36,8 @@ import { ListComponent } from './members/list/list.component';
     MemberEditComponent,
     PhotoEditorComponent,
     ListComponent,
+    MessagesComponentComponent,
+    MemberMessagesComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,8 +47,9 @@ import { ListComponent } from './members/list/list.component';
     ReactiveFormsModule,
     SharedModule,
     NgxSpinnerModule,
+    MomentModule,
     // NgxGalleryModule,
-    
+
   ],
   providers: [
     {provide:HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi:true}
